@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 const swiper = new Swiper(".swiper-container", {
   pagination: {
     el: ".swiper-pagination",
@@ -45,7 +48,12 @@ const swiper = new Swiper(".swiper-container", {
 // this piece of code, disable all the posibilites to open inspect menu
 // as this page consist confidential data !
 
+/**
+ * Prevents default behaviour
+ * @param {event} e 
+ */
 document.oncontextmenu = (e) => { e.preventDefault(); }
+
 document.onkeydown = function (e) {
     if (event.keyCode == 123) {
         console.log(event)

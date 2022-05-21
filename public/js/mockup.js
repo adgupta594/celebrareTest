@@ -24,8 +24,11 @@ if (watemarks5) watemarks5.style.display = "none";
 var watemarks6 = document.getElementById("watermarkswiper6");
 if (watemarks6) watemarks6.style.display = "none";
 
-//user login on clicking download
+let uuid = "";
 
+/**
+ * This given function prompts user to login before download
+ */
 firebase.auth().onAuthStateChanged(function (user) {
 	if (user) {
 		u = 1;
@@ -53,8 +56,14 @@ firebase.auth().onAuthStateChanged(function (user) {
 		$(".user-name-container").css("display", "none");
 		$(".user-name").text(" ");
 	}
+	uuid = user.uid;
+	//console.log(uuid);
 });
 
+/** 
+ * if user is loggedIn and click on his/her profile(photo) 
+ * then signOut function should be called and user should logout
+*/ 
 $(".logout-button").on("click", function () {
 	firebase
 		.auth()
@@ -67,9 +76,13 @@ $(".logout-button").on("click", function () {
 	$(".user-name-container").css("display", "none");
 	$(".user-name").text(" ");
 	$(this).css("display", "none");
-	window.location.reload();
+	window.location.reload();	//reloads the current document
 });
 
+/**
+ * if user is loggedIn and click on his/her profile(name) 
+ * then signOut function should be called and user should logOut 
+ */
 $(".user-name-container").on("click", function () {
 	firebase.auth().signOut();
 	$(".user-details-container").css("display", "none");
@@ -79,6 +92,9 @@ $(".user-name-container").on("click", function () {
 	window.location.reload();
 });
 
+/**
+ * Opens the login page on clicking SignIn button
+ */
 var scrolling;
 $(".login-button").on("click", function (event) {
 	scrolling = 1;
@@ -129,6 +145,10 @@ $(".login-button").on("click", function (event) {
 $(".login_page").on("click", function (event) {
 	event.stopPropagation();
 });
+
+/**
+ * Closes the login popup
+ */
 $("#close-login-popup").on("click", function (event) {
 	scrolling = 2;
 	event.stopPropagation();
@@ -136,6 +156,9 @@ $("#close-login-popup").on("click", function (event) {
 	document.body.classList.remove("stop-scrolling");
 });
 
+/**
+ * Function to log in using google
+ */
 $("#googleLogIn1").on("click", function (event) {
 	event.stopPropagation();
 	const provider = new firebase.auth.GoogleAuthProvider();
@@ -154,6 +177,10 @@ $("#googleLogIn1").on("click", function (event) {
 			console.log(errorCode, errorMessage);
 		});
 });
+
+/**
+ * Function to log in using google
+ */
 $("#googleLogIn2").on("click", function (event) {
 	event.stopPropagation();
 	const provider = new firebase.auth.GoogleAuthProvider();
@@ -174,11 +201,20 @@ $("#googleLogIn2").on("click", function (event) {
 });
 
 // const phoneInputField = document.querySelector("#phone");
+
+/**
+ * Function to sign in using mobile number
+ */
 const phoneInput = window.intlTelInput(phoneInputField, {
 	preferredCountries: ["in", "gb", "us"],
 	utilsScript:
 		"https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
 });
+
+/**
+ * Function process the data after login form
+ * @param {*} event 
+ */
 function process(event) {
 	event.preventDefault();
 
@@ -204,6 +240,10 @@ function process(event) {
 			console.log(errorCode, errorMessage);
 		});
 }
+
+/**
+ * Function to resend the otp
+ */
 function resend() {
 	var num = localStorage.getItem("no");
 	firebase
@@ -240,6 +280,10 @@ function resend() {
 //         console.log(errorCode,errorMessage);
 //       });
 //   }
+
+/**
+ * Function to verify the otp
+ */
 function show() {
 	var otp =
 		document.getElementById("ist").value +
@@ -267,6 +311,11 @@ function show() {
 		});
 }
 
+/**
+ * Changes the control from one blank to other during input of otp
+ * @param {Initial blank} first 
+ * @param {Next blank} last 
+ */
 function clickEvent(first, last) {
 	var c = 0;
 	if (document.getElementById("ist").value == "") {
@@ -338,12 +387,23 @@ function clickEvent(first, last) {
 //       });
 //   }
 
+/**
+ * Opens all_mockup.html page
+ */
 document.getElementById("see_all_mockup").onclick = function () {
 	location.href = "./all_mockup.html";
 };
+
+/**
+ * Opens all_mockup.html page
+ */
 document.getElementById("see_all_mockup_mob").onclick = function () {
 	location.href = "./all_mockup.html";
 };
+
+/**
+ * 
+ */
 function change_layout() {
 	$("#mockupbox1").remove();
 	console.log(" i removed mockupbox")
@@ -514,10 +574,18 @@ function change_layout() {
 
 
 }
+
+/**
+ * 
+ */
 function change_layout2() {
 	document.getElementById("mainbox1").style.display = "block";
 	document.getElementById("mainbox2").style.display = "none";
 }
+
+/**
+ * 
+ */
 var animation = bodymovin.loadAnimation({
 	container: document.getElementById("animation1"),
 	renderer: "svg",
@@ -557,6 +625,10 @@ var canvas1,
 	ctxsw3;
 var x = 0; //x=0 if both mockup and swiper needs to be downloaded and x=1 if only swiper needs to be downloaded
 //for downloading with mockup
+
+/**
+ * Function to download with mockup
+ */
 function downloadswiper() {
 	const vm = localStorage.getItem("with_mockup");
 	const mockwatermark = localStorage.getItem("mockwatermark");
@@ -601,7 +673,10 @@ function downloadswiper() {
 	};
 	createPDF();
 }
-//for downloading without mockup
+
+/**
+ * Function for downloading without mockup
+ */
 function downloadswiper2() {
 	var doc = new jsPDF(); // Creating the jsPDF Instance
 	var createPDF = function () {
@@ -630,6 +705,9 @@ function downloadswiper2() {
 	createPDF();
 }
 
+/**
+ * 
+ */
 $("#download2").on("click", async function (event) {
 	if (u == 0) {
 		scrolling = 1;
@@ -714,6 +792,10 @@ $("#download2").on("click", async function (event) {
 		});
 	}
 });
+
+/**
+ * Function to handle payment in mobile screen
+ */
 $("#download3").on("click", async function (event) {
 	if (u == 0) {
 		scrolling = 1;
@@ -799,6 +881,9 @@ $("#download3").on("click", async function (event) {
 	}
 });
 
+/**
+ * Handles the payment process
+ */
 async function payment_login2() {
 	if (u == 0) {
 		scrolling = 1;
@@ -883,6 +968,10 @@ async function payment_login2() {
 		});
 	}
 }
+
+/**
+ * Sees through payment process
+ */
 async function payment_login() {
 	if (u == 0) {
 		scrolling = 1;
@@ -972,7 +1061,9 @@ async function payment_login() {
 	}
 }
 
-
+/**
+ * 
+ */
 window.addEventListener("load", (event) => {
 	async function canvasdownload1() {
 		c = 0;
@@ -1004,7 +1095,7 @@ window.addEventListener("load", (event) => {
 			canvas4.width = 1000;
 			canvas4.height = 1000;
 			canvas4.getContext("2d").drawImage(img4, 0, 0, 1000, 1000);
-			localStorage.setItem("ecard-image4", canvas4.toDataURL("image/png"));
+			localStorage.setItem("ecard-image4", canvas4.toDataURL("image/jpeg"));
 
 			loadWeddingCards();
 		};
@@ -1183,6 +1274,10 @@ window.addEventListener("load", (event) => {
 
 let balance = 0;
 let partnerDocRef;
+
+/**
+ * Function for partner login
+ */
 const partnersLogin = async () => {
 	const email = document.getElementById("partners-email").value;
 	const pass = document.getElementById("partners-password").value;
@@ -1217,6 +1312,9 @@ const partnersLogin = async () => {
 	$("#partners-login-modal").modal("hide");
 };
 
+/**
+ * Function to buy card
+ */
 const buyCardsAsPartner = async () => {
 	const cardprice = JSON.parse(localStorage.getItem("card-price"));
 	const e = confirm(
@@ -1264,6 +1362,9 @@ for (let i = 0; i < received_Cards.length; ++i) {
 	el.style.transform = "scale(1)";
 }
 
+/**
+ * Function to get base64 address of the images
+ */
 const getBase64 = () => {
 	base64Array = new Array();
 	for (let i = 1; i <= received_Cards.length; ++i) {
@@ -1272,7 +1373,7 @@ const getBase64 = () => {
 			useCORS: true,
 		});
 		canvasPromise.then(function (canvas) {
-			base64Array.push(`${i.toString()}${canvas.toDataURL("image/svg", 1.0)}`);
+			base64Array.push(`${i.toString()}${canvas.toDataURL("image/jpeg", 0.98)}`);
 			base64Array.sort();
 		});
 	}
@@ -1311,7 +1412,11 @@ const downloadInvitationCards = async () => {
 	}
 };
 
+/**
+ * Funtion returns the sample card for free pdf i.e. the pdf with watermark
+ */
 const downlaodSampleCards = () => {
+	console.log("yo");
 	const btn = document.getElementById("downloadsw");
 	const l = document.getElementById("final-loader");
 	const b = document.querySelector("body");
@@ -1324,8 +1429,12 @@ const downlaodSampleCards = () => {
 		l.style.display = "none";
 		b.classList.remove("stop-scroll");
 	}, 100);
+	saveDraft();
 };
 
+/**
+ * to add img HTML element inside display-final-cards div dynamically(by fetching image url)
+ */
 const displayFinalCards = () => {
 	const dfc = document.querySelector("#display-final-cards");
 	for (let i = 0; i < base64Array.length; ++i) {
@@ -1345,6 +1454,9 @@ const finalSwiperCardsHelper = () => {
 	displayFinalCards();
 };
 
+/**
+ * 
+ */
 const loadFinalSwiperCards = () => {
 	const finalSwiperCards = document.querySelector("#final-cards");
 	finalSwiperCards.innerHTML = "";
@@ -1357,6 +1469,9 @@ const loadFinalSwiperCards = () => {
 	}, 2000);
 };
 
+/**
+ * To authenticate user
+ */
 firebase.auth().onAuthStateChanged((user) => {
 	if (user) {
 		partnerDocRef = db.collection("B2B").doc(user.uid);
@@ -1373,6 +1488,10 @@ firebase.auth().onAuthStateChanged((user) => {
 	}
 });
 
+/**
+ * Get the value from Local storage
+ * @returns data stored in userSessionData
+ */
 function getLocalStorage() {
 	let obj = {};
 	if (typeof localStorage.userSessionData !== "undefined") {
@@ -1381,3 +1500,41 @@ function getLocalStorage() {
 	return obj;
 }
 
+/**
+ * Function to add data in tht backend
+ */
+function saveToBackend() {
+	let cardData = JSON.parse(localStorage.WeddingDataObjectForBackend);
+	let today = new Date();
+	cardData.fileName = "Draft";
+	let ref = db.collection("users").doc("weddingcards").collection(uuid).doc(cardData.fileName);
+	ref.set(cardData)
+	.then((ref) => {
+		console.log("Data added to the backend");
+	})
+	.catch((error) => {
+		console.log("Error adding document: "+ error);
+	});
+}
+
+/**
+ * Function to save the data on local storage
+ */
+function saveDraft() {
+	let drafts = [];
+	let draft = JSON.parse(localStorage.WeddingDataObjectForBackend);
+	let cardFound =  false;
+	if (typeof localStorage.cardDraft !== "undefined") {
+		drafts = JSON.parse(localStorage.cardDraft);
+		for (const card of drafts) {
+			if(JSON.stringify(card) === JSON.stringify(draft)){
+				cardFound = true;
+				break;
+			}
+		}	
+	}
+	if(!cardFound){
+		drafts.push(draft);
+	}
+	localStorage.setItem("cardDraft",JSON.stringify(drafts));
+}
