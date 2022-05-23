@@ -807,6 +807,7 @@ function rgb2hex(rgb) {
 function hex(x) {
 	return isNaN(x) ? "00" : hexDigits[(x - (x % 16)) / 16] + hexDigits[x % 16];
 }
+
 async function done_func() {
 	var imagel = [], textl = [], propertyl = [], filename = '';
 	var ratio = 0.3;
@@ -862,7 +863,7 @@ async function done_func() {
 	for (let i = 1; i <= totalCards; ++i)
 		cards[i - 1] = document.getElementById(`ec-${i}`).outerHTML;
 	localStorage.setItem("final-card-images", JSON.stringify(cards));
-
+	
 	const cardType = JSON.parse(localStorage.getItem("card-type"));
 
 	let pdoc = db.collection("weddingcards").doc("price");

@@ -1522,10 +1522,13 @@ function saveToBackend() {
  */
 function saveDraft() {
 	let drafts = [];
+	let images = [];
 	let draft = JSON.parse(localStorage.WeddingDataObjectForBackend);
+	let image = JSON.parse(localStorage.getItem("final-card-images"));
 	let cardFound =  false;
-	if (typeof localStorage.cardDraft !== "undefined") {
+	if (typeof localStorage.cardDraft !== "undefined" && typeof localStorage.draftImg !== "undefined") {
 		drafts = JSON.parse(localStorage.cardDraft);
+		images = JSON.parse(localStorage.draftImg);
 		for (const card of drafts) {
 			if(JSON.stringify(card) === JSON.stringify(draft)){
 				cardFound = true;
@@ -1534,7 +1537,9 @@ function saveDraft() {
 		}	
 	}
 	if(!cardFound){
-		drafts.push(draft);
+		drafts.unshift(draft);
+		images.unshift(image);
 	}
 	localStorage.setItem("cardDraft",JSON.stringify(drafts));
+	localStorage.setItem("draftImg", JSON.stringify(images))
 }
