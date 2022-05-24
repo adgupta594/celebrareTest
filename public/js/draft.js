@@ -1,5 +1,4 @@
 let drafts = JSON.parse(localStorage.draftImg);
-let cards = JSON.parse(localStorage.cardDraft);
 
 let root = document.querySelector("#root");
 let value = ""
