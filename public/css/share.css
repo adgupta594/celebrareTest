@@ -130,8 +130,28 @@
   overflow: hidden;
 }
 
-#rzp-button1 {
-  border: 2px solid black !important;
+#display-final-cards{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#downloadsw, #rzp-button1 {
+  border: 2px solid red !important;
+}
+
+#downloadsw:hover, #downloadsw:link {
+  background-color: red !important;
+  color: #fff !important;
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.3);
+  transition-duration: .2s;
+}
+
+#rzp-button1:hover, #rzp-button1:link {
+  background-color: white !important;
+  color: red !important;
+  box-shadow: 5px 5px rgba(255, 0, 0, 0.3);
+  transition-duration: .2s;
 }
 
 @media (min-width: 730px) {

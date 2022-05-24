@@ -1,4 +1,5 @@
 let drafts = JSON.parse(localStorage.draftImg);
+let cards = JSON.parse(localStorage.cardDraft);
 
 let root = document.querySelector("#root");
 let value = ""
@@ -17,7 +18,6 @@ drafts.forEach(draft => {
     value += "</div>"
     console.log(draft);
 });
-
 
 root.innerHTML = value;
 
