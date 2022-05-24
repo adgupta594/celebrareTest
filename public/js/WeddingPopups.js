@@ -75,7 +75,7 @@ var userSessionData = {
 	RCmainPageCards: {},
 	RCmainPageCardsDetails: [],
 	WCmainPageCardsDetails: [],
-	countryCode: 0,
+	countryCode: "",
 	popupCardsData: {},
 	WCsectionCards: {},
 	RCsectionCards: {},
@@ -180,29 +180,38 @@ var countriesAvailable = { 'ae': 1, 'gb': 1, 'in': 1, 'my': 1, 'pk': 1, 'us': 1 
 var myCountryCode = 'in';
 async function fetch_ip(path) {
 
-	let userSessionDataObject = getLocalStorage();
 
 	await fetch(path).then(function (data) {
 
+		let userSessionDataObject = getLocalStorage();
+		console.log(userSessionDataObject);
+
+
+
+
 		let ip_data = data.json()
-		let country_code = ip_data["countryCode"].toLowerCase();
-		console.log('i got ',country_code)
-		if (countriesAvailable.country_code != 1) userSessionDataObject["countryCode"] = "in";
-		else userSessionDataObject.countryCode = country_code;
-		localStorage.setItem("userSessionData", JSON.stringify(userSessionDataObject));
-		
-	}).catch(function () {
-		console.log('Unable to fetch Country Code !')
-		// console.log('Unable to fetch Country Code !')
+		ip_data.then(function (result) {
+			let country_code = result.countryCode.toLowerCase();
+			console.log('h');
+			if (countriesAvailable.country_code == 1) {
+				userSessionData.countryCode = country_code
+			}
+			else {
+				userSessionData.countryCode = 'in'
+			}
+			localStorage.setItem("userSessionData", JSON.stringify(userSessionData));
+			console.log(userSessionData);
+		})
+
+	}).catch(function (error) {
+		console.log(error.message);
 		userSessionDataObject.countryCode = "in";
 		localStorage.setItem("userSessionData", JSON.stringify(userSessionDataObject));
-
-		// console.log("setted successfully !")
-		// let a = getLocalStorage()
-		// console.log(a.countryCode)
+		myCountryCode = 'in';
 	});
 
 }
+
 // This code sets the country code of the current user !
 
 

@@ -25,6 +25,11 @@ var watemarks6 = document.getElementById("watermarkswiper6");
 if (watemarks6) watemarks6.style.display = "none";
 
 //user login on clicking download
+let uuid = "";
+
+/**
+ * This given function prompts user to login before download
+ */
 
 firebase.auth().onAuthStateChanged(function (user) {
 	if (user) {
@@ -53,8 +58,12 @@ firebase.auth().onAuthStateChanged(function (user) {
 		$(".user-name-container").css("display", "none");
 		$(".user-name").text(" ");
 	}
+	uuid = user.uuid
 });
-
+/** 
+ * if user is loggedIn and click on his/her profile(photo) 
+ * then signOut function should be called and user should logout
+*/
 $(".logout-button").on("click", function () {
 	firebase
 		.auth()
@@ -70,6 +79,10 @@ $(".logout-button").on("click", function () {
 	window.location.reload();
 });
 
+/**
+ * if user is loggedIn and click on his/her profile(name) 
+ * then signOut function should be called and user should logOut 
+ */
 $(".user-name-container").on("click", function () {
 	firebase.auth().signOut();
 	$(".user-details-container").css("display", "none");
@@ -78,6 +91,10 @@ $(".user-name-container").on("click", function () {
 	$(this).css("display", "none");
 	window.location.reload();
 });
+
+/**
+ * Opens the login page on clicking SignIn button
+ */
 
 var scrolling;
 $(".login-button").on("click", function (event) {
@@ -129,6 +146,9 @@ $(".login-button").on("click", function (event) {
 $(".login_page").on("click", function (event) {
 	event.stopPropagation();
 });
+/**
+ * Closes the login popup
+ */
 $("#close-login-popup").on("click", function (event) {
 	scrolling = 2;
 	event.stopPropagation();
@@ -136,6 +156,9 @@ $("#close-login-popup").on("click", function (event) {
 	document.body.classList.remove("stop-scrolling");
 });
 
+/**
+ * Function to log in using google
+ */
 $("#googleLogIn1").on("click", function (event) {
 	event.stopPropagation();
 	const provider = new firebase.auth.GoogleAuthProvider();
@@ -154,6 +177,10 @@ $("#googleLogIn1").on("click", function (event) {
 			console.log(errorCode, errorMessage);
 		});
 });
+
+/**
+ * Function to log in using google
+ */
 $("#googleLogIn2").on("click", function (event) {
 	event.stopPropagation();
 	const provider = new firebase.auth.GoogleAuthProvider();
@@ -174,11 +201,19 @@ $("#googleLogIn2").on("click", function (event) {
 });
 
 // const phoneInputField = document.querySelector("#phone");
+
+/**
+ * Function to sign in using mobile number
+ */
 const phoneInput = window.intlTelInput(phoneInputField, {
 	preferredCountries: ["in", "gb", "us"],
 	utilsScript:
 		"https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
 });
+
+/**
+ * Function to sign in using mobile number
+ */
 function process(event) {
 	event.preventDefault();
 
@@ -204,6 +239,11 @@ function process(event) {
 			console.log(errorCode, errorMessage);
 		});
 }
+
+/**
+ * Function to resend the otp
+ */
+
 function resend() {
 	var num = localStorage.getItem("no");
 	firebase
@@ -240,6 +280,10 @@ function resend() {
 //         console.log(errorCode,errorMessage);
 //       });
 //   }
+
+/**
+ * Function to verify the otp
+ */
 function show() {
 	var otp =
 		document.getElementById("ist").value +
@@ -267,6 +311,11 @@ function show() {
 		});
 }
 
+/**
+ * Changes the control from one blank to other during input of otp
+ * @param {Initial blank} first 
+ * @param {Next blank} last 
+ */
 function clickEvent(first, last) {
 	var c = 0;
 	if (document.getElementById("ist").value == "") {
@@ -338,9 +387,16 @@ function clickEvent(first, last) {
 //       });
 //   }
 
+/**
+ * Opens all_mockup.html page
+ */
 document.getElementById("see_all_mockup").onclick = function () {
 	location.href = "./all_mockup.html";
 };
+
+/**
+ * Opens all_mockup.html page
+ */
 document.getElementById("see_all_mockup_mob").onclick = function () {
 	location.href = "./all_mockup.html";
 };
@@ -1272,7 +1328,7 @@ const getBase64 = () => {
 			useCORS: true,
 		});
 		canvasPromise.then(function (canvas) {
-			base64Array.push(`${i.toString()}${canvas.toDataURL("image/svg", 1.0)}`);
+			base64Array.push(`${i.toString()}${canvas.toDataURL("image/jpeg", 0.98)}`);
 			base64Array.sort();
 		});
 	}
@@ -1324,6 +1380,7 @@ const downlaodSampleCards = () => {
 		l.style.display = "none";
 		b.classList.remove("stop-scroll");
 	}, 100);
+	saveDraft();
 };
 
 const displayFinalCards = () => {
@@ -1381,3 +1438,47 @@ function getLocalStorage() {
 	return obj;
 }
 
+
+/**
+ * Function to add data in tht backend
+ */
+ function saveToBackend() {
+	let cardData = JSON.parse(localStorage.WeddingDataObjectForBackend);
+	let today = new Date();
+	cardData.fileName = "Draft";
+	let ref = db.collection("users").doc("weddingcards").collection(uuid).doc(cardData.fileName);
+	ref.set(cardData)
+	.then((ref) => {
+		console.log("Data added to the backend");
+	})
+	.catch((error) => {
+		console.log("Error adding document: "+ error);
+	});
+}
+
+/**
+ * Function to save the data on local storage
+ */
+function saveDraft() {
+	let drafts = [];
+	let images = [];
+	let draft = JSON.parse(localStorage.WeddingDataObjectForBackend);
+	let image = JSON.parse(localStorage.getItem("final-card-images"));
+	let cardFound =  false;
+	if (typeof localStorage.cardDraft !== "undefined" && typeof localStorage.draftImg !== "undefined") {
+		drafts = JSON.parse(localStorage.cardDraft);
+		images = JSON.parse(localStorage.draftImg);
+		for (const card of drafts) {
+			if(JSON.stringify(card) === JSON.stringify(draft)){
+				cardFound = true;
+				break;
+			}
+		}	
+	}
+	if(!cardFound){
+		drafts.unshift(draft);
+		images.unshift(image);
+	}
+	localStorage.setItem("cardDraft",JSON.stringify(drafts));
+	localStorage.setItem("draftImg", JSON.stringify(images))
+} 

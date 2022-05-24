@@ -807,6 +807,7 @@ function rgb2hex(rgb) {
 function hex(x) {
 	return isNaN(x) ? "00" : hexDigits[(x - (x % 16)) / 16] + hexDigits[x % 16];
 }
+
 async function done_func() {
 	var imagel = [], textl = [], propertyl = [], filename = '';
 	var ratio = 0.3;
