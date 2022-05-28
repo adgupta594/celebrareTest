@@ -175,6 +175,8 @@ function getLocalStorage() {
 
 // script written by aman !
 
+// updated by manas 
+
 // This code sets the country code of the current user !
 var countriesAvailable = { 'ae': 1, 'gb': 1, 'in': 1, 'my': 1, 'pk': 1, 'us': 1 }
 var myCountryCode = 'in';
