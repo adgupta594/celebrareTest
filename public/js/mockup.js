@@ -1505,7 +1505,6 @@ function getLocalStorage() {
  */
 function saveToBackend() {
 	let cardData = JSON.parse(localStorage.WeddingDataObjectForBackend);
-	let today = new Date();
 	cardData.fileName = "Draft";
 	let ref = db.collection("users").doc("weddingcards").collection(uuid).doc(cardData.fileName);
 	ref.set(cardData)
@@ -1522,15 +1521,18 @@ function saveToBackend() {
  */
 function saveDraft() {
 	let drafts = [];
+	let cards = [];
 	let images = [];
 	let draft = JSON.parse(localStorage.WeddingDataObjectForBackend);
 	let image = JSON.parse(localStorage.getItem("final-card-images"));
+	let card = JSON.parse(localStorage.getItem("card-type"));
 	let cardFound =  false;
-	if (typeof localStorage.cardDraft !== "undefined" && typeof localStorage.draftImg !== "undefined") {
+	if (typeof localStorage.cardDraft !== "undefined" && typeof localStorage.draftImg !== "undefined" && typeof localStorage.typeOfCards !== "undefined") {
 		drafts = JSON.parse(localStorage.cardDraft);
 		images = JSON.parse(localStorage.draftImg);
-		for (const card of drafts) {
-			if(JSON.stringify(card) === JSON.stringify(draft)){
+		cards = JSON.parse(localStorage.typeOfCards);
+		for (const page of drafts) {
+			if(JSON.stringify(page) === JSON.stringify(draft)){
 				cardFound = true;
 				break;
 			}
@@ -1539,7 +1541,9 @@ function saveDraft() {
 	if(!cardFound){
 		drafts.unshift(draft);
 		images.unshift(image);
+		cards.unshift(card);
 	}
 	localStorage.setItem("cardDraft",JSON.stringify(drafts));
-	localStorage.setItem("draftImg", JSON.stringify(images))
+	localStorage.setItem("draftImg", JSON.stringify(images));
+	localStorage.setItem("typeOfCards", JSON.stringify(cards));
 }

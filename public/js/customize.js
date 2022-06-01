@@ -1,3 +1,5 @@
+let load = false;
+
 /*initializing the side bar slider*/
 let galleryThumbs = new Swiper(".gallery-thumbs", {
 	direction: "vertical",
@@ -92,20 +94,44 @@ fetchSelectedCardData = async () => {
 
 	let id = getParametersID();
 	if (id == undefined || id == "") window.location.href = "./weddingcard.html";
+	if(id.includes("myDraft-")){
+		load = true;
+		let data = JSON.parse(localStorage.WeddingDataObjectForBackend);
+		let dataStyle = data.textList;
+		let dataImages = [...new Set(data.imageList)];
+		let f, b;
+		if(dataImages[0].includes('Front')){
+			f = dataImages[0];
+			b = dataImages[1];
+		}
+		else {
+			f = dataImages[1];
+			b = dataImages[0];
+		}
+		selectedCard = {
+			front: f,
+			back: b,
+			text1: dataStyle[0],
+			text2: dataStyle[1],
+			text3: dataStyle[2],
+		};
+		category = JSON.parse(localStorage.getItem("card-type"));
+		console.log(selectCard);
+	}
+	else {
+		let userSessionDataObject = getLocalStorage();
+		let data = await getData('weddingcard2/allcard/cards/' + id);
+		data = data.data();
 
-
-	let userSessionDataObject = getLocalStorage();
-	let data = await getData('weddingcard2/allcard/cards/' + id);
-	data = data.data();
-
-	selectedCard = {
-		front: data["mediumImgFrontLink"],
-		back: data["mediumImgBackLink"],
-		text1: data["text1"],
-		text2: data["text2"],
-		text3: data["text3"],
-	};
-	category = data["category"];
+		selectedCard = {
+			front: data["mediumImgFrontLink"],
+			back: data["mediumImgBackLink"],
+			text1: data["text1"],
+			text2: data["text2"],
+			text3: data["text3"],
+		};
+		category = data["category"];
+	}
 
 	$("#customize-screen-loader").remove();
 
@@ -157,6 +183,10 @@ loadScreenBgImage = async () => {
 };
 
 function getTextLines() {
+	if(load === true) {
+		let text = JSON.parse(localStorage.WeddingDataObjectForBackend).arrayTextList;
+		return text;
+	}
 	let userSessionDataObject = getLocalStorage();
 	let text_string1, text_string2, text_string3, groomgpString, bridegpString;
 
