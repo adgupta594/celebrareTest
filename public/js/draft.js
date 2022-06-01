@@ -81,8 +81,8 @@ for (let i = 0; i < delBtns.length; i++) {
                 card.push(dataCard[index]);
             }
         }
-        localStorage.setItem("draftImg", JSON.stringify(obj));
-        localStorage.setItem("cardDraft", JSON.stringify(img));
+        localStorage.setItem("draftImg", JSON.stringify(img));
+        localStorage.setItem("cardDraft", JSON.stringify(obj));
         localStorage.setItem("typeOfCards", JSON.stringify(card));
         window.location.href = `./draft.html`
     })   

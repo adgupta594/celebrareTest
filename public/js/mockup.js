@@ -24,7 +24,12 @@ if (watemarks5) watemarks5.style.display = "none";
 var watemarks6 = document.getElementById("watermarkswiper6");
 if (watemarks6) watemarks6.style.display = "none";
 
+//user login on clicking download
 let uuid = "";
+
+/**
+ * This given function prompts user to login before download
+ */
 
 /**
  * This given function prompts user to login before download
@@ -56,14 +61,12 @@ firebase.auth().onAuthStateChanged(function (user) {
 		$(".user-name-container").css("display", "none");
 		$(".user-name").text(" ");
 	}
-	uuid = user.uid;
-	//console.log(uuid);
+	uuid = user.uuid
 });
-
 /** 
  * if user is loggedIn and click on his/her profile(photo) 
  * then signOut function should be called and user should logout
-*/ 
+*/
 $(".logout-button").on("click", function () {
 	firebase
 		.auth()
@@ -145,7 +148,6 @@ $(".login-button").on("click", function (event) {
 $(".login_page").on("click", function (event) {
 	event.stopPropagation();
 });
-
 /**
  * Closes the login popup
  */
@@ -212,8 +214,7 @@ const phoneInput = window.intlTelInput(phoneInputField, {
 });
 
 /**
- * Function process the data after login form
- * @param {*} event 
+ * Function to sign in using mobile number
  */
 function process(event) {
 	event.preventDefault();
